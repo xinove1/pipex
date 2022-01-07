@@ -1,13 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/02 18:36:18 by nthomas-          #+#    #+#             */
+/*   Updated: 2022/01/04 09:06:43 by nthomas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
+// TODO: refactor buffer variables to use a const value defined
 int	main(int argc, const char *argv[])
 {
 	t_pipes	previous_pipes;
 	if (argc < 4)
-	{
-		ft_putstr_fd("Not enough arguments. \n", 2);
-		exit(1);
-	}
+		error_handler(0);
 	printf("r : %s\n", argv[4]);
 	previous_pipes = read_file((char *)argv[1]);
 	previous_pipes = parse_setup_cmd((char *)argv[2], previous_pipes);
@@ -18,14 +28,14 @@ int	main(int argc, const char *argv[])
 
 void	write_file(char *file_name, t_pipes pipes)
 {
-	char	*path;
 	char	buffer[101];
 	int		file_fd;
 	int		qty_read;
 
 	close(pipes.stdout[1]);
-	path = ft_strjoin("./", file_name);
-	file_fd = open(path, O_WRONLY, O_CREAT, O_TRUNC);
+	file_fd = open(file_name, O_WRONLY | O_TRUNC | O_CREAT , 0664);
+	if (file_fd == -1)
+	 	error_handler(2);
 	qty_read = read(pipes.stdout[0], buffer, 100);
 	while (qty_read)
 	{
@@ -35,37 +45,28 @@ void	write_file(char *file_name, t_pipes pipes)
 		qty_read = read(pipes.stdout[0], buffer, 100);
 	}
 	close(file_fd);
-	free(path);
 }
 
 t_pipes	read_file(char *file_name)
 {
-	char	*path;
 	t_pipes	pipes;
 	char	buffer[101];
 	int		file_fd;
 	int		qty_read;
 
-	path = ft_strjoin("./", file_name);
-	if(!access(path, R_OK))
+	file_fd = open(file_name, O_RDONLY);
+	// TODO: test which error it throws and maybe print the file name
+	if (file_fd == -1)
+		error_handler(2);
+	pipes = init_pipes();
+	printf("File path: %s \n", file_name);
+	qty_read = read(file_fd, buffer, 100);
+	while (qty_read)
 	{
-		pipes = init_pipes();
-		file_fd = open(path, O_RDONLY);
-		printf("File path: %s \n", path);
+		write(pipes.stdout[1], buffer, qty_read);
 		qty_read = read(file_fd, buffer, 100);
-		while (qty_read)
-		{
-			write(pipes.stdout[1], buffer, qty_read);
-			qty_read = read(file_fd, buffer, 100);
-		}
-		close(file_fd);
 	}
-	else
-	{
-		perror("");
-		exit(1);
-	}
-	free(path);
+	close(file_fd);
 	return (pipes);
 }
 
@@ -87,16 +88,15 @@ t_pipes	parse_setup_cmd(char *arg, t_pipes stdin)
 	return (pipes);
 }
 
-// TODO: check if !access is the right way of checking the path
 char	*find_path(char *command)
 {
-	const char	*possible_paths[2] = {"/usr/bin/", "/usr/local/bin/"};
+	const char	*possible_paths[3] = {"/usr/bin/", "/usr/local/bin/", NULL};
 	char		*path;
 	int			i;
 
 	path = ft_strjoin(possible_paths[0], command);
 	i = 1;
-	while (access(path, F_OK) && i < 2)
+	while (access(path, F_OK) && possible_paths[i])
 	{
 		printf("path not found: %s \n", path);
 		free(path);
@@ -105,7 +105,7 @@ char	*find_path(char *command)
 	if (!access(path, F_OK))
 		printf("path found: %s \n", path);
 	else
-		perror("Command not found. \n");
+		error_handler(5);
 	return (path);
 }
 
@@ -115,6 +115,7 @@ void	exec_command(t_pipes pipes, char **args)
 	char	*command;
 
 	command = find_path(args[0]);
+	// TODO: error handling for fork
 	child = fork();
 	if (child == 0)
 	{
@@ -123,4 +124,21 @@ void	exec_command(t_pipes pipes, char **args)
 	}
 	wait(NULL);
 	free(command);
+}
+
+void	error_handler(int err_id)
+{
+	if (err_id == 0)
+		ft_putendl_fd("To few arguments.", 2);
+	else if (err_id == 1)
+		ft_putendl_fd("To many arguments.", 2);
+	else if (err_id == 2)
+		perror("");
+	else if (err_id == 3)
+		ft_putendl_fd("File dosn't exist.", 2);
+	else if (err_id == 4)
+		ft_putendl_fd("Fail to fork.", 2);
+	else if (err_id == 5)
+		ft_putendl_fd("Command not found.", 2);
+	exit(EXIT_FAILURE);
 }

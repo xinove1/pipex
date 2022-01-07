@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/22 00:13:02 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/02 09:23:26 by nthomas-         ###   ########.fr       */
+/*   Created: 2022/01/02 18:34:41 by nthomas-          #+#    #+#             */
+/*   Updated: 2022/01/04 08:35:02 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ char	*find_path(char *command);
 t_pipes	read_file(char *file_name);
 t_pipes	init_pipes(void);
 void	write_file(char *file_name, t_pipes pipes);
+void	error_handler(int err_id);
 
 #endif
