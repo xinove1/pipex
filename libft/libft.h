@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nthomas- <thomas.sircus@gmail.com>         +#+  +:+       +#+        */
+/*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 03:01:57 by nthomas-          #+#    #+#             */
-/*   Updated: 2021/07/29 03:02:11 by nthomas-         ###   ########.fr       */
+/*   Updated: 2022/01/10 15:03:25 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,23 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/resource.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
-typedef struct		s_list
+typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
 }					t_list;
+
+typedef struct s_last
+{
+	char			reminder[BUFFER_SIZE + 1];
+	int				fd;
+	struct s_last	*next;
+}				t_last;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -64,5 +75,9 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+char	*get_next_line(int fd);
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
+void	*ft_memmove_gnl(void *dst, const void *src, size_t len);
+void	clear_last(t_last **lasts, int fd);
 
 #endif

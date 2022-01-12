@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/19 13:49:12 by nthomas-          #+#    #+#             */
+/*   Updated: 2022/01/10 13:40:39 by nthomas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
+
 static	size_t	count_d(char const *str, char d);
 
 static size_t	find_next_d(char const *str, size_t i, int flag, char d);
@@ -11,7 +24,7 @@ char	**ft_split(char const *s, char c)
 	size_t	d_count;
 
 	d_count = count_d(s, c);
-	splited = malloc((d_count + 1 ) * sizeof(char *));
+	splited = malloc((d_count + 1) * sizeof(char *));
 	if (splited == 0)
 		return (0);
 	i = 0;

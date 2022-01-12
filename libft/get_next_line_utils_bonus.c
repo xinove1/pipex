@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/19 13:48:59 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/10 13:37:42 by nthomas-         ###   ########.fr       */
+/*   Created: 2021/08/26 19:42:35 by nthomas-          #+#    #+#             */
+/*   Updated: 2022/01/10 15:05:30 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dst, const void *src, size_t len)
+void	*ft_memmove_gnl(void *dst, const void *src, size_t len)
 {
 	int	i;
 
@@ -36,5 +36,30 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 			i--;
 		}
 	}
+	((char *) dst)[i] = '\0';
 	return (dst);
+}
+
+void	clear_last(t_last **lasts, int fd)
+{
+	t_last	*tmp;
+	t_last	*clear;
+
+	if (!*lasts)
+		return ;
+	clear = *lasts;
+	tmp = NULL;
+	while (clear->fd != fd && clear->next)
+	{
+		tmp = clear;
+		clear = clear->next;
+	}
+	if (clear->fd == fd)
+	{
+		if (clear == *lasts)
+			*lasts = clear->next;
+		if (tmp)
+			tmp->next = clear->next;
+		free(clear);
+	}
 }
