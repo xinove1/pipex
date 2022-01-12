@@ -6,7 +6,7 @@
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 13:47:03 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/11 13:47:05 by nthomas-         ###   ########.fr       */
+/*   Updated: 2022/01/12 11:13:20 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,25 +73,31 @@ void	error_handler(int err_id)
 	exit(EXIT_FAILURE);
 }
 
-char	*find_path(char *command)
+char	*find_path(char *command, char **envp)
 {
-	const char	*possible_paths[3] = {"/usr/bin/", "/usr/local/bin/", NULL};
-	char		*path;
-	int			i;
+	char	**possible_paths;
+	char	*path;
+	char	*tmp;
+	int		i;
 
-	path = ft_strjoin(possible_paths[0], command);
+	possible_paths = parse_path(envp);
+	tmp = ft_strjoin(possible_paths[0], "/");
+	path = ft_strjoin(tmp, command);
 	i = 1;
 	while (access(path, F_OK) && possible_paths[i])
 	{
 		free(path);
-		path = ft_strjoin(possible_paths[i++], command);
+		free(tmp);
+		tmp = ft_strjoin(possible_paths[i++], "/");
+		path = ft_strjoin(tmp, command);
 	}
 	if (access(path, F_OK))
 	{
 		ft_putstr_fd("Command not found: ", 2);
 		ft_putendl_fd(command, 2);
 		free(path);
-		return (NULL);
+		path = NULL;
 	}
+	free(tmp);
 	return (path);
 }
