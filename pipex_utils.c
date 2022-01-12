@@ -6,7 +6,7 @@
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 13:47:03 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/12 11:13:20 by nthomas-         ###   ########.fr       */
+/*   Updated: 2022/01/12 18:02:26 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,22 +73,20 @@ void	error_handler(int err_id)
 	exit(EXIT_FAILURE);
 }
 
-char	*find_path(char *command, char **envp)
+char	*find_path(char *command, char **bin_paths)
 {
-	char	**possible_paths;
 	char	*path;
 	char	*tmp;
 	int		i;
 
-	possible_paths = parse_path(envp);
-	tmp = ft_strjoin(possible_paths[0], "/");
+	tmp = ft_strjoin(bin_paths[0], "/");
 	path = ft_strjoin(tmp, command);
 	i = 1;
-	while (access(path, F_OK) && possible_paths[i])
+	while (access(path, F_OK) && bin_paths[i])
 	{
 		free(path);
 		free(tmp);
-		tmp = ft_strjoin(possible_paths[i++], "/");
+		tmp = ft_strjoin(bin_paths[i++], "/");
 		path = ft_strjoin(tmp, command);
 	}
 	if (access(path, F_OK))
