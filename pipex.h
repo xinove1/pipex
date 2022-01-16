@@ -6,7 +6,7 @@
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 18:34:41 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/12 19:06:44 by nthomas-         ###   ########.fr       */
+/*   Updated: 2022/01/13 14:57:07 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ typedef struct s_pipes
 
 int		exec_command(t_pipes pipes, char *command, char **args, char **envp);
 void	setup_pipes_child(t_pipes pipes);
-t_pipes	parse_setup_cmd(char *arg, t_pipes stdin, char **envp, char **bin_paths);
+t_pipes	setup_cmd(char *arg, t_pipes stdin, char **envp, char **bin_paths);
 void	close_pipes(t_pipes pipes);
 char	*find_path(char *command, char **bin_paths);
 t_pipes	read_file(char *file_name);
 t_pipes	init_pipes(void);
 void	write_file(char *file_name, t_pipes pipes);
 void	error_handler(int err_id);
-int		something(t_pipes pipes, char **args, char **envp, char **bin_paths);
+int		cmd_util(t_pipes pipes, char **args, char **envp, char **bin_paths);
 int		check_child_err(t_pipes pipes);
-char 	**parse_path(char **envp);
+char	**parse_path(char **envp);
 void	free_2darray(char **array);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 18:36:18 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/12 19:22:49 by nthomas-         ###   ########.fr       */
+/*   Updated: 2022/01/13 14:57:38 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,35 +23,15 @@ int	main(int argc, const char *argv[], char *envp[])
 		error_handler(1);
 	previous_pipes = read_file((char *)argv[1]);
 	path = parse_path(envp);
-	previous_pipes = parse_setup_cmd((char *)argv[2], previous_pipes, envp, path);
-	previous_pipes = parse_setup_cmd((char *)argv[3], previous_pipes, envp, path);
+	previous_pipes = setup_cmd((char *)argv[2], previous_pipes, envp, path);
+	previous_pipes = setup_cmd((char *)argv[3], previous_pipes, envp, path);
 	free_2darray(path);
 	write_file((char *)argv[4], previous_pipes);
 	close_pipes(previous_pipes);
 	return (0);
 }
 
-char **parse_path(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (ft_strncmp("PATH", envp[i], 4))
-		i++;
-	return (ft_split(envp[i] + 5, ':'));
-}
-
-void	free_2darray(char **array)
-{
-	int		i;
-
-	i = -1;
-	while (array[++i])
-		free(array[i]);
-	free(array);
-}
-
-t_pipes	parse_setup_cmd(char *arg, t_pipes stdin, char **envp, char **bin_paths)
+t_pipes	setup_cmd(char *arg, t_pipes stdin, char **envp, char **bin_paths)
 {
 	char	**args;
 	t_pipes	pipes;
@@ -61,7 +41,7 @@ t_pipes	parse_setup_cmd(char *arg, t_pipes stdin, char **envp, char **bin_paths)
 	dup2(stdin.stdout[0], pipes.stdin[0]);
 	close_pipes(stdin);
 	args = ft_split(arg, ' ');
-	error = something(pipes, args, envp, bin_paths);
+	error = cmd_util(pipes, args, envp, bin_paths);
 	free_2darray(args);
 	if (error)
 	{
@@ -72,7 +52,7 @@ t_pipes	parse_setup_cmd(char *arg, t_pipes stdin, char **envp, char **bin_paths)
 	return (pipes);
 }
 
-int	something(t_pipes pipes, char **args, char **envp, char **bin_paths)
+int	cmd_util(t_pipes pipes, char **args, char **envp, char **bin_paths)
 {
 	char	*command;
 	int		error;

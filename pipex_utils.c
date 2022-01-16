@@ -6,7 +6,7 @@
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 13:47:03 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/12 18:02:26 by nthomas-         ###   ########.fr       */
+/*   Updated: 2022/01/12 19:27:40 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,14 @@ char	*find_path(char *command, char **bin_paths)
 	}
 	free(tmp);
 	return (path);
+}
+
+char	**parse_path(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (ft_strncmp("PATH", envp[i], 4))
+		i++;
+	return (ft_split(envp[i] + 5, ':'));
 }

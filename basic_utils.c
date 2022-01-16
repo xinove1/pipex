@@ -6,7 +6,7 @@
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 18:35:09 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/09 10:24:10 by nthomas-         ###   ########.fr       */
+/*   Updated: 2022/01/12 19:27:35 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,14 @@ t_pipes	init_pipes(void)
 	pipe(pipes.stdin);
 	pipe(pipes.stdout);
 	return (pipes);
+}
+
+void	free_2darray(char **array)
+{
+	int		i;
+
+	i = -1;
+	while (array[++i])
+		free(array[i]);
+	free(array);
 }
