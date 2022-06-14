@@ -1,6 +1,6 @@
 NAME= pipex
 
-LIBFT = ./libft
+LIBFT = ../libft
 
 CC=gcc
 
@@ -8,9 +8,9 @@ CFLAGS=-Wall -Wextra -Werror
 
 RM=rm -f
 
-SRC= pipex.c basic_utils.c file_utils.c pipe_utils.c
+SRC= pipex.c basic_utils.c pipex_utils.c
 
-BONUS =
+BONUS = pipex_bonus.c basic_utils.c pipex_utils.c here_doc_bonus.c
 
 BONUS_OBJ = $(BONUS:.c=.o)
 
