@@ -69,6 +69,8 @@ void	program_loop(int argc, char **argv, t_data *data)
 		exec_command(command, args, data);
 		check_child_err(data->pipes);
 		push_pipes(data);
+		free(command);
+		free_2darray(args);
 	}
 	write_file(argv[i], O_WRONLY | O_TRUNC | O_CREAT, data);
 	close_pipes(data->previous);
