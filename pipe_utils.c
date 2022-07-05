@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/29 13:51:58 by nthomas-          #+#    #+#             */
+/*   Updated: 2022/06/29 13:51:59 by nthomas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 void	setup_pipes_child(t_pipes pipes)
@@ -24,6 +36,7 @@ t_pipes	init_pipes(void)
 {
 	t_pipes	pipes;
 
+	//TODO refactor pipes usage
 	pipe(pipes.err);
 	pipe(pipes.in);
 	pipe(pipes.out);
@@ -32,8 +45,8 @@ t_pipes	init_pipes(void)
 
 void	push_pipes(t_data *data)
 {
-    close_pipes(data->previous);
-    data->previous = data->pipes;
+	close_pipes(data->previous);
+	data->previous = data->pipes;
 	data->pipes = init_pipes();
 	dup2(data->previous.out[0], data->pipes.in[0]);
 	close(data->previous.out[1]);

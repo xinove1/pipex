@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   file_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/29 13:51:50 by nthomas-          #+#    #+#             */
+/*   Updated: 2022/06/29 13:51:50 by nthomas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 void	write_file(char *file_name, int flags, t_data *data)
 {
 	char	buffer[101];
-	int	file_fd;
-	int	qty_read;
+	int		file_fd;
+	int		qty_read;
 
 	file_fd = open(file_name, flags, 0664); //TODO search what 0664 file permission is
 	if (file_fd == -1)
@@ -22,14 +34,14 @@ void	write_file(char *file_name, int flags, t_data *data)
 void	read_file(char *file_name, t_data *data)
 {
 	char	buffer[101];
-	int	file_fd;
-	int	qty_read;
+	int		file_fd;
+	int		qty_read;
 
 	file_fd = open(file_name, O_RDONLY);
 	if (file_fd == -1)
 	{
-		ft_putendl_fd(file_name, 2); //TODO check if this is necessary
-		error_handler(1, data);
+		ft_putendl_fd(file_name, 2);
+		error_handler(1, data); //TODO standard behavior does not execute first pipe program but executes the rest, here we are exiting the program so it dosen't comply
 	}
 	data->pipes = init_pipes();
 	qty_read = read(file_fd, buffer, 100);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/29 13:52:03 by nthomas-          #+#    #+#             */
+/*   Updated: 2022/06/29 13:52:04 by nthomas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 int	main(int argc, char *argv[], char *envp[])
@@ -56,7 +68,8 @@ void	program_loop(int argc, char **argv, t_data *data)
 	char	*command;
 
 	i = 1;
-	read_file(argv[1], data);
+	read_file(argv[1], data); // TODO make read file return 1 to add to i if the input file dosen't exist
+	// NOTE making it return 1 on error and 0 on success is kind weird, other solution would be an if, if sucess initalize i as 1 else as 2
 	while (i++ < argc - 2)
 	{
 		args = ft_split(argv[i], ' ');
