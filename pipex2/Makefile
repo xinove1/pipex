@@ -8,7 +8,7 @@ CFLAGS=-Wall -Wextra -Werror
 
 RM=rm -f
 
-SRC= pipex.c utils.c
+SRC= pipex.c basic_utils.c file_utils.c pipe_utils.c
 
 BONUS =
 

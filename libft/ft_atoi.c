@@ -6,14 +6,14 @@
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 13:47:52 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/10 13:32:04 by nthomas-         ###   ########.fr       */
+/*   Updated: 2022/03/25 09:21:22 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 static int	parse_str(const char *str, int *negative);
-static int	ft_isspace(char c);
+int			ft_isspace(char c);
 
 int	ft_atoi(const char *str)
 {
@@ -65,7 +65,7 @@ static int	parse_str(const char *str, int *negative)
 	return (i);
 }
 
-static int	ft_isspace(char c)
+int	ft_isspace(char c)
 {
 	if (c == ' '
 		|| c == '\t'

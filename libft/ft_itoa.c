@@ -6,7 +6,7 @@
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 13:48:27 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/10 13:37:59 by nthomas-         ###   ########.fr       */
+/*   Updated: 2022/03/24 13:54:16 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,22 @@ char	*ft_itoa(int n)
 	if (!ln)
 		result[i] = '0';
 	populate_result(ln, i, result);
+	return (result);
+}
+
+char	*ft_itoa_unsigned(unsigned int n)
+{
+	int		i;
+	char	*result;
+
+	result = malloc(count_decimal(n) + 1);
+	if (!result)
+		return (NULL);
+	i = count_decimal(n) - 1;
+	result[i + 1] = '\0';
+	if (!n)
+		result[i] = '0';
+	populate_result(n, i, result);
 	return (result);
 }
 

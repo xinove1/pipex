@@ -6,7 +6,7 @@
 /*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 03:01:57 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/01/10 15:03:25 by nthomas-         ###   ########.fr       */
+/*   Updated: 2022/03/25 09:20:26 by nthomas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,15 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdarg.h>
 # include <sys/resource.h>
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
+# endif
+# if __APPLE__
+#  define IS_MACOS 1
+# else
+#  define IS_MACOS 0
 # endif
 
 typedef struct s_list
@@ -79,5 +85,14 @@ char	*get_next_line(int fd);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 void	*ft_memmove_gnl(void *dst, const void *src, size_t len);
 void	clear_last(t_last **lasts, int fd);
+int		ft_printf(const char *string, ...);
+int		print_c(va_list args);
+int		print_string(va_list args);
+char	*ft_itoa_hex(unsigned long n, int lower);
+char	*ft_itoa_unsigned(unsigned int n);
+int		print_hex(va_list args, int lower);
+int		print_numbers(va_list args, int unsigned_number);
+int		print_p(va_list args);
+int		ft_isspace(char c);
 
 #endif

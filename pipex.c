@@ -1,110 +1,87 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nthomas- <nthomas-@student.42sp.org.br     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/29 13:52:03 by nthomas-          #+#    #+#             */
-/*   Updated: 2022/06/29 13:52:04 by nthomas-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "pipex.h"
 
+void	pipex_loop(int argc, char **argv, t_data *data);
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_data	data;
-	int		here_doc;
 
 	if (argc < 5)
-		error_handler(0, NULL);
+	{
+		ft_putendl_fd("To few arguments.", 2);
+		exit(EXIT_FAILURE);
+	}
+	else if ( argc > 5)
+	{
+		ft_putendl_fd("To many arguments.", 2);
+		exit(EXIT_FAILURE);
+	}
 	data.envp = envp;
 	data.paths = parse_path(envp);
-	data.previous = init_pipes();
-	data.pipes = init_pipes();
-	here_doc = check_doc(argv[1]);
-	if (here_doc)
-		here_doc_loop(argc, argv, &data);
-	else
-		program_loop(argc, argv, &data);
+	pipex_loop(argc, argv, &data);
 	free_2darray(data.paths);
 	return (EXIT_SUCCESS);
 }
 
-void	here_doc_loop(int argc, char **argv, t_data *data)
+void	pipex_loop(int argc, char **argv, t_data *data)
 {
 	int		i;
-	char	**args;
-	char	*command;
-	int		input;
+	int		write_flags;
 
-	input = read_eof(argv[2]);
-	while (push_input_pipe(input, data))
+	write_flags = O_WRONLY | O_TRUNC | O_CREAT;
+	data->pipes.in[0] = open(argv[1], O_RDONLY);
+	if (data->pipes.in[0] < 0)
 	{
+		ft_putstr_fd("pipex: no such file or directory: ", 2);
+		ft_putendl_fd(argv[1], 2);
+		data->pipes.in[0] = 0;
 		i = 2;
-		while (i++ < argc - 2)
-		{
-			args = ft_split(argv[i], ' ');
-			command = find_path(args[0], data);
-			if (!command)
-			{
-				free_2darray(args);
-				error_handler(-1, data);
-			}
-			exec_command(command, args, data);
-			check_child_err(data->pipes);
-			push_pipes(data);
-		}
-		write_file(argv[i], O_WRONLY | O_APPEND | O_CREAT, data);
 	}
-	close_pipes(data->previous);
-}
-
-void	program_loop(int argc, char **argv, t_data *data)
-{
-	int		i;
-	char	**args;
-	char	*command;
-
-	i = 1;
-	read_file(argv[1], data); // TODO make read file return 1 to add to i if the input file dosen't exist
-	// NOTE making it return 1 on error and 0 on success is kind weird, other solution would be an if, if sucess initalize i as 1 else as 2
-	while (i++ < argc - 2)
+	else
+		i = 1;
+	while (++i < argc - 1)
 	{
-		args = ft_split(argv[i], ' ');
-		command = find_path(args[0], data);
-		if (!command)
-		{
-			free_2darray(args);
-			error_handler(-1, data);
-		}
-		exec_command(command, args, data);
-		check_child_err(data->pipes);
-		push_pipes(data);
+		if (i == argc - 2)
+			data->pipes.out[1] = open(argv[i + 1], write_flags, 0664);
+		else
+			pipe(data->pipes.out);
+		prep_command(argv[i], data);
+		close(data->pipes.in[0]);
+		close(data->pipes.out[1]);
+		data->pipes.in[0] = data->pipes.out[0];
 	}
-	write_file(argv[i], O_WRONLY | O_TRUNC | O_CREAT, data);
-	close_pipes(data->previous);
-	close_pipes(data->pipes);
 }
 
-int	exec_command(char *command, char **args, t_data *data)
+void	prep_command(char *command, t_data *data)
+{
+	char	**args;
+	char	*path;
+
+	args = ft_split(command, ' ');
+	path = find_path(args[0], data);
+	if (!path)
+	{
+		free_2darray(args);
+		return ;
+	}
+	free(args[0]);
+	args[0] = path;
+	exec_command(args, data);
+	free_2darray(args);
+}
+
+void	exec_command(char **args, t_data *data)
 {
 	pid_t	child;
 
 	child = fork();
 	if (child == 0)
 	{
-		setup_pipes_child(data->pipes);
-		execve(command, &args[0], data->envp);
+		ft_printf("command %s \n", args[0]);
+		dup2(data->pipes.out[1], 1);
+		dup2(data->pipes.in[0], 0);
+		execve(args[0], &args[0], data->envp);
 	}
 	else if (child < 0)
-	{
-		free_2darray(args);
-		error_handler(1, data);
-	}
+		ft_putendl_fd("Fail to fork.", 2);
 	wait(NULL);
-	free(command);
-	free_2darray(args);
-	return (0);
 }
