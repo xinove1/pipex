@@ -28,6 +28,6 @@ char	*find_path(char *command, t_data *data);
 int		check_child_err(t_pipes pipes);
 
 void	exec_command(char **args, t_data *data);
-void	open_to_pipe(char *file, int flags, int permissions, int pipe);
+void	pipex_loop(int argc, char **argv, t_data *data);
 void	prep_command(char *command, t_data *data);
 #endif // PIPEX_H

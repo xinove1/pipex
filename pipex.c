@@ -1,6 +1,5 @@
 #include "pipex.h"
 
-void	pipex_loop(int argc, char **argv, t_data *data);
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_data	data;
@@ -10,7 +9,7 @@ int	main(int argc, char *argv[], char *envp[])
 		ft_putendl_fd("To few arguments.", 2);
 		exit(EXIT_FAILURE);
 	}
-	else if ( argc > 5)
+	else if (argc > 5)
 	{
 		ft_putendl_fd("To many arguments.", 2);
 		exit(EXIT_FAILURE);
@@ -27,17 +26,16 @@ void	pipex_loop(int argc, char **argv, t_data *data)
 	int		i;
 	int		write_flags;
 
+	i = 1;
 	write_flags = O_WRONLY | O_TRUNC | O_CREAT;
 	data->pipes.in[0] = open(argv[1], O_RDONLY);
-	if (data->pipes.in[0] < 0)
+	if (data->pipes.in[0] == -1)
 	{
-		ft_putstr_fd("pipex: no such file or directory: ", 2);
-		ft_putendl_fd(argv[1], 2);
-		data->pipes.in[0] = 0;
+		perror(argv[1]);
+		pipe(data->pipes.in);
+		close(data->pipes.in[1]);
 		i = 2;
 	}
-	else
-		i = 1;
 	while (++i < argc - 1)
 	{
 		if (i == argc - 2)
@@ -76,7 +74,6 @@ void	exec_command(char **args, t_data *data)
 	child = fork();
 	if (child == 0)
 	{
-		ft_printf("command %s \n", args[0]);
 		dup2(data->pipes.out[1], 1);
 		dup2(data->pipes.in[0], 0);
 		execve(args[0], &args[0], data->envp);
