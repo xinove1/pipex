@@ -10,7 +10,7 @@ RM=rm -f
 
 SRC= pipex.c utils.c
 
-BONUS =
+BONUS = 0
 
 BONUS_OBJ = $(BONUS:.c=.o)
 
@@ -18,15 +18,13 @@ OBJ=$(SRC:.c=.o)
 
 $(NAME): $(SRC) pipex.h
 	@make -C $(LIBFT)
-	$(CC) $(CFLAGS) -c $(SRC)
+	$(CC) $(CFLAGS) -D BONUS=$(BONUS) -c $(SRC)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT)/libft.a  -o $(NAME)
 
 all: $(NAME)
 
-bonus: pipex_bonus.h
-	@make -C $(LIBFT)
-	$(CC) $(CFLAGS) -c $(BONUS)
-	$(CC) $(CFLAGS) $(BONUS_OBJ) $(LIBFT)/libft.a  -o $(NAME)
+bonus: BONUS=1
+bonus: $(NAME)
 
 clean:
 	@make -C $(LIBFT) clean

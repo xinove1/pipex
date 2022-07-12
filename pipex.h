@@ -5,11 +5,15 @@
 # include <stdio.h>
 # include <sys/wait.h>
 # include "./libft/libft.h"
+# define WTC_FLAGS O_WRONLY | O_TRUNC | O_CREAT
+# define WAC_FLAGS O_WRONLY | O_APPEND| O_CREAT
+# ifndef BONUS
+#  define BONUS 0
+# endif
 
 typedef struct s_pipes
 {
 	int	in[2];
-	int	err[2];
 	int	out[2];
 }	t_pipes;
 
@@ -21,11 +25,9 @@ typedef struct s_data
 }	t_data;
 
 char	**parse_path(char **envp);
-int		check_doc(char *arg);
 void	free_2darray(char **array);
-void	error_handler(int err_id, char *str);
+int		error_handler(int err_id, char *str, int new_exit);
 char	*find_path(char *command, t_data *data);
-int		check_child_err(t_pipes pipes);
 
 void	exec_command(char **args, t_data *data);
 void	pipex_loop(int argc, char **argv, t_data *data);
