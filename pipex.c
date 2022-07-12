@@ -12,8 +12,6 @@
 
 #include "pipex.h"
 
-int	open_file(char *file, int flags, int *dest);
-
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_data	data;
@@ -85,7 +83,7 @@ void	prep_command(char *command, t_data *data)
 	char	**args;
 	char	*path;
 
-	args = ft_split(command, ' ');
+	args = parse_substr(ft_split(command, ' '));
 	path = find_path(args[0], data);
 	if (!path)
 	{
