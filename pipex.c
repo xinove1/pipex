@@ -29,7 +29,7 @@ int	main(int argc, char *argv[], char *envp[])
 	data.envp = envp;
 	data.paths = parse_path(envp);
 	if (BONUS && !ft_strncmp(argv[1], "here_doc", 8))
-		printf("here doc \n");
+		here_doc_loop(argc, argv, &data);
 	else
 		pipex_loop(argc, argv, &data);
 	free_2darray(data.paths);

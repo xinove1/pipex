@@ -8,7 +8,7 @@ CFLAGS=-Wall -Wextra -Werror
 
 RM=rm -f
 
-SRC= pipex.c utils.c parser.c
+SRC= pipex.c utils.c parser.c here_doc.c
 
 BONUS = 0
 
@@ -17,7 +17,7 @@ BONUS_OBJ = $(BONUS:.c=.o)
 OBJ=$(SRC:.c=.o)
 
 $(NAME): $(SRC) pipex.h
-	@make -C $(LIBFT)
+	make -C $(LIBFT) bonus
 	$(CC) $(CFLAGS) -D BONUS=$(BONUS) -c $(SRC)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT)/libft.a  -o $(NAME)
 
