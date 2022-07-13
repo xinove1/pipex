@@ -32,6 +32,20 @@ char	**parse_path(char **envp)
 	return (ft_split(envp[i] + 5, ':'));
 }
 
+int	open_file(char *file, int flags, int *dest)
+{
+	int	fd;
+
+	fd = open(file, flags, 0664);
+	if (fd < 0)
+	{
+		error_handler(2, file, 1);
+		return (0);
+	}
+	*dest = fd;
+	return (1);
+}
+
 char	*find_path(char *command, t_data *data)
 {
 	char	*path;
@@ -57,27 +71,6 @@ char	*find_path(char *command, t_data *data)
 	}
 	free(tmp);
 	return (path);
-}
-
-int	read_eof(char *eof)
-{
-	int		pipe_line[2];
-	char	*line;
-
-	pipe(pipe_line);
-	ft_putstr_fd("\nhere_doc>", 1);
-	line = get_next_line(0);
-	while (ft_strncmp(eof, line, ft_strlen(eof)))
-	{
-		write(pipe_line[1], line, ft_strlen(line));
-		free(line);
-		ft_putstr_fd("here_doc>", 1);
-		line = get_next_line(0);
-	}
-	if (line)
-		free(line);
-	close(pipe_line[1]);
-	return (pipe_line[0]);
 }
 
 int	error_handler(int err_id, char *str, int new_exit)

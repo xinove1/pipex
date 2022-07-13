@@ -64,20 +64,6 @@ void	pipex_loop(int argc, char **argv, t_data *data)
 	}
 }
 
-int	open_file(char *file, int flags, int *dest)
-{
-	int	fd;
-
-	fd = open(file, flags, 0664);
-	if (fd < 0)
-	{
-		error_handler(2, file, 1);
-		return (0);
-	}
-	*dest = fd;
-	return (1);
-}
-
 void	prep_command(char *command, t_data *data)
 {
 	char	**args;
