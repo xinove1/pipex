@@ -21,14 +21,12 @@ int	main(int argc, char *argv[], char *envp[])
 		ft_putendl_fd("Too few arguments.", 2);
 		exit(EXIT_FAILURE);
 	}
-	else if (argc > 5)
-	{
-		ft_putendl_fd("Too many arguments.", 2);
-		exit(EXIT_FAILURE);
-	}
 	data.envp = envp;
 	data.paths = parse_path(envp);
-	pipex_loop(argc, argv, &data);
+	if (!ft_strncmp(argv[1], "here_doc", 8))
+		here_doc_loop(argc, argv, &data);
+	else
+		pipex_loop(argc, argv, &data);
 	free_2darray(data.paths);
 	return (error_handler(0, NULL, -1));
 }

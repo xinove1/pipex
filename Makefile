@@ -8,24 +8,26 @@ CFLAGS=-Wall -Wextra -Werror
 
 RM=rm -f
 
-SRC= pipex.c utils.c parser.c here_doc.c
+SRC= pipex.c utils.c parser.c
 
-BONUS = 0
+BONUS_SRC = pipex_bonus.c utils.c parser.c here_doc_bonus.c
 
-BONUS_OBJ = $(BONUS:.c=.o)
+BONUS_OBJ = $(BONUS_SRC:.c=.o)
 
 OBJ=$(SRC:.c=.o)
 
 $(NAME): $(SRC) pipex.h
 	make -C $(LIBFT)
-	make -C $(LIBFT) bonus
-	$(CC) $(CFLAGS) -D BONUS=$(BONUS) -c $(SRC)
+	$(CC) $(CFLAGS) -c $(SRC)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT)/libft.a  -o $(NAME)
 
 all: $(NAME)
 
-bonus: BONUS=1
-bonus: $(NAME)
+bonus: $(BONUS_SRC) pipex.h
+	make -C $(LIBFT)
+	make -C $(LIBFT) bonus
+	$(CC) $(CFLAGS) -c $(BONUS_SRC)
+	$(CC) $(CFLAGS) $(BONUS_OBJ) $(LIBFT)/libft.a  -o $(NAME)
 
 clean:
 	@make -C $(LIBFT) clean
