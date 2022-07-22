@@ -38,7 +38,8 @@ int	main(int argc, char *argv[], char *envp[])
 
 void	pipex_loop(int argc, char **argv, t_data *data)
 {
-	int		i;
+	int			i;
+	const int	flags = O_WRONLY | O_TRUNC | O_CREAT;
 
 	i = 1;
 	if (!open_file(argv[1], O_RDONLY, &data->pipes.in[0]))
@@ -52,7 +53,7 @@ void	pipex_loop(int argc, char **argv, t_data *data)
 		error_handler(0, NULL, 0);
 		if (i == argc - 2)
 		{
-			if (!open_file(argv[i + 1], WTC_FLAGS, &data->pipes.out[1]))
+			if (!open_file(argv[i + 1], flags, &data->pipes.out[1]))
 				break ;
 		}
 		else

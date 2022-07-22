@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thomas </var/spool/mail/thomas>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/22 04:25:08 by thomas            #+#    #+#             */
+/*   Updated: 2022/07/22 04:53:05 by thomas           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PIPEX_H
 # define PIPEX_H
 # include <unistd.h>
@@ -5,11 +17,6 @@
 # include <stdio.h>
 # include <sys/wait.h>
 # include "./libft/libft.h"
-# define WTC_FLAGS O_WRONLY | O_TRUNC | O_CREAT
-# define WAC_FLAGS O_WRONLY | O_APPEND| O_CREAT
-# ifndef BONUS
-#  define BONUS 0
-# endif
 
 typedef struct s_pipes
 {
@@ -20,8 +27,8 @@ typedef struct s_pipes
 typedef struct s_data
 {
 	t_pipes		pipes;
-    char		**paths;
-    char		**envp;
+	char		**paths;
+	char		**envp;
 }	t_data;
 
 char	**parse_path(char **envp);

@@ -17,6 +17,7 @@ BONUS_OBJ = $(BONUS:.c=.o)
 OBJ=$(SRC:.c=.o)
 
 $(NAME): $(SRC) pipex.h
+	make -C $(LIBFT)
 	make -C $(LIBFT) bonus
 	$(CC) $(CFLAGS) -D BONUS=$(BONUS) -c $(SRC)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT)/libft.a  -o $(NAME)

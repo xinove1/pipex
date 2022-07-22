@@ -35,8 +35,9 @@ t_list	*read_eof(char *eof)
 
 void	here_doc_loop(int argc, char **argv, t_data *data)
 {
-	int		i;
-	t_list	*lines;
+	int			i;
+	t_list		*lines;
+	const int	flags = O_WRONLY | O_APPEND | O_CREAT;
 
 	lines = read_eof(argv[2]);
 	while (push_pipe(lines, data))
@@ -47,7 +48,7 @@ void	here_doc_loop(int argc, char **argv, t_data *data)
 			error_handler(0, NULL, 0);
 			if (i == argc - 2)
 			{
-				if (!open_file(argv[i + 1], WAC_FLAGS, &data->pipes.out[1]))
+				if (!open_file(argv[i + 1], flags, &data->pipes.out[1]))
 					break ;
 			}
 			else
