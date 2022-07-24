@@ -17,13 +17,14 @@ char	**parse_substr(char **args)
 	int		head;
 	int		tail;
 	char	*tmp;
+	char	*delimeter;
 
-	find_head_tail(args, &head, &tail);
-	if (head == 0 && tail == 0)
+	delimeter = find_head_tail(args, &head, &tail);
+	if (!delimeter)
 		return (args);
 	if (head != tail)
 		cat_args(args, head, tail);
-	tmp = ft_strtrim(args[head], "'");
+	tmp = ft_strtrim(args[head], delimeter);
 	free(args[head]);
 	args[head] = tmp;
 	return (args);
@@ -68,18 +69,31 @@ char	*ft_strjoin_triple(char *s1, char *s2, char *s3)
 	return (str);
 }
 
-void	find_head_tail(char **args, int *head, int *tail)
+char	*find_head_tail(char **args, int *head, int *tail)
 {
 	int	i;
+	int	del;
 
+	del = 0;
 	i = -1;
-	*head = 0;
-	*tail = 0;
 	while (args[++i])
 	{
-		if (args[i][0] == '\'' && *head == 0)
+		if ((args[i][0] == '\'' || args[i][0] == '\"') && del == 0)
+		{
+			if (args[i][0] == '\'')
+				del = 2;
+			else
+				del = 1;
 			*head = i;
-		if (args[i][ft_strlen(args[i]) - 1] == '\'')
+		}
+		if (args[i][ft_strlen(args[i]) - 1] == '\'' && del == 2)
+			*tail = i;
+		else if (args[i][ft_strlen(args[i]) - 1] == '\"' && del == 1)
 			*tail = i;
 	}
+	if (del == 1)
+		return ("\"");
+	else if (del == 2)
+		return ("'");
+	return (NULL);
 }
